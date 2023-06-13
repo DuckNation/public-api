@@ -1,64 +1,76 @@
 import asyncio
 
-from fastapi import websockets
+import async_timeout
+from redis.asyncio.client import PubSub
+from starlette.websockets import WebSocket, WebSocketDisconnect
 
-from database import MongoSingleton, RedisSingleton
+from database import RedisSingleton
 from utils.APIRouter import APIRouter
 
 router = APIRouter()
 
-redis_subscriptions = {}
-websocket_clients = set()
+redis_subscriptions: dict[str, PubSub] = {}
+websocket_clients: set["Client"] = set()
 
 
 class Client:
-    def __init__(self, websocket, channel):
+    def __init__(self, websocket: WebSocket, channel):
         self.websocket = websocket
         self.channel = channel
 
 
 async def subscribe_redis_channel(channel):
     if channel not in redis_subscriptions:
-        subscription = await( (await RedisSingleton.get_instance()).pubsub()).subscribe(channel)
-        print(f"Subscribed to Redis channel: {channel}")
-        print(subscription)
-        redis_subscriptions[channel] = subscription
+        pubsub = (await RedisSingleton.get_instance()).pubsub()
+        await pubsub.subscribe(channel)
+        redis_subscriptions[channel] = pubsub
         asyncio.create_task(process_redis_messages(channel))
 
 
 async def process_redis_messages(channel):
     subscription = redis_subscriptions[channel]
-    while await subscription[0].wait_message():
-        message = await subscription[0].get(encoding="utf-8")
-        await send_message_to_clients(channel, message)
+    while True:
+        try:
+            async with async_timeout.timeout(0.01):
+                message = await subscription.get_message(ignore_subscribe_messages=True)
+                if message:
+                    await send_message_to_clients(channel, bytes(message["data"]).decode("utf-8"))
+                await asyncio.sleep(0.01)
+        except asyncio.TimeoutError:
+            pass
+        finally:
+            if channel not in [c.channel for c in websocket_clients]:
+                await unsubscribe_redis_channel(channel)
+                break
 
 
 async def send_message_to_clients(channel, message):
     clients = [client for client in websocket_clients if client.channel == channel]
     for client in clients:
-        await client.websocket.send(message)
+        await client.websocket.send_text(message)
 
 
 async def unsubscribe_redis_channel(channel):
-    global redis_subscriptions
     subscription = redis_subscriptions.pop(channel, None)
-    if subscription is not None:
-        await subscription[0].unsubscribe(channel)
+    if subscription:
+        await subscription.unsubscribe(channel)
 
 
-@router.websocket("/ws/{channel}")
-async def ws_handler(websocket: websockets.WebSocket, channel: str):
+@router.websocket("/{channel}")
+async def websocket_endpoint(channel: str, websocket: WebSocket):
     await websocket.accept()
     client = Client(websocket, channel)
     websocket_clients.add(client)
     await subscribe_redis_channel(channel)
     try:
+        instance = await RedisSingleton.get_instance()
         while True:
-            message = await websocket.receive()
-            print(f"Received message from client: {message}")
-    except Exception:
+            data = await websocket.receive_text()
+            await instance.publish(channel, data)
+    except WebSocketDisconnect:
         pass
     finally:
         websocket_clients.remove(client)
         if channel not in [c.channel for c in websocket_clients]:
             await unsubscribe_redis_channel(channel)
+
