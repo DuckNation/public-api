@@ -1,11 +1,13 @@
-import json
 import typing
 
 import motor.motor_asyncio
 from redis import asyncio as aioredis
+import os
 
-config = json.load(open("config.json"))
-
+REDIS_IP = os.getenv("REDIS_IP", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", 6379)
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 
 class RedisSingleton:
     _instance: typing.Optional[aioredis.Redis] = None
@@ -22,9 +24,9 @@ class RedisSingleton:
     @staticmethod
     async def _connect_to_redis() -> aioredis.Redis:
         return await aioredis.from_url(
-            f"redis://{config['redis-ip']}:{config['redis-port']}",
+            f"redis://{REDIS_IP}:{REDIS_PORT}",
             username="default",
-            password=config["redis-password"]
+            password=REDIS_PASSWORD
         )
 
     @classmethod
@@ -47,7 +49,7 @@ class MongoSingleton:
 
     @staticmethod
     async def _connect_to_mongo() -> motor.motor_asyncio.AsyncIOMotorClient:
-        return motor.motor_asyncio.AsyncIOMotorClient(config["mongo-uri"])
+        return motor.motor_asyncio.AsyncIOMotorClient(MONGO_URI)
 
     @classmethod
     async def close_mongo_connection(cls):
