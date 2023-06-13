@@ -16,4 +16,4 @@ COPY . /code
 EXPOSE 6420
 
 # Start the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "127.0.0.1", "--port", "6420", "--proxy-headers"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "6420", "--proxy-headers"]
