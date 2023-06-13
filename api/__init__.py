@@ -18,6 +18,7 @@ async def is_valid_api_key(api_key: str, redis):
 
 
 async def verify_api_key(api_key: str = Depends(api_key_header), redis=Depends(RedisSingleton.get_instance)):
+    api_key = api_key.split(" ")[-1]
     if not await is_valid_api_key(api_key, redis):
         raise HTTPException(status_code=403, detail="Invalid API key")
     return api_key
