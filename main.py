@@ -1,10 +1,21 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api import router as protected_api
 from database import RedisSingleton
 
-app = FastAPI(title="Quacking API", version="0.0.1", docs_url="/api/docs", redoc_url="/api/redoc", openapi_url="/api/openapi.json")
+app = FastAPI(title="Quacking API", version="0.0.1")
+
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(
     protected_api
