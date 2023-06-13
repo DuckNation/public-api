@@ -4,7 +4,7 @@ on:
   push
 
 jobs:
-  build:
+  build-and-generate-artifact:
     runs-on: [self-hosted]
 
     steps:
@@ -18,9 +18,14 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx build --platform linux/amd64 -t fast-api:latest .
+          docker buildx build --platform linux/arm64 -t fast-api:latest .
 
-      - name: Save Docker image as artifact
+      - name: Save Docker image as tarball
+        run: |
+          docker save fast-api:latest -o docker-image.tar
+
+      - name: Upload Docker image as artifact
         uses: actions/upload-artifact@v2
         with:
           name: docker-image
-          path: ./
+          path: ./docker-image.tar
