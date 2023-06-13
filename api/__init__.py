@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import APIKeyHeader
 
 from api.verification import router as verification_router
+# from api.wss import router as wss_router
 from database import RedisSingleton
 from utils.APIRouter import APIRouter
 from .verification import verify, create_pin, unverify
@@ -23,3 +24,4 @@ async def verify_api_key(api_key: str = Depends(api_key_header), redis=Depends(R
 
 
 router.include_router(verification_router, dependencies=[Depends(verify_api_key)])
+# router.include_router(wss_router)
