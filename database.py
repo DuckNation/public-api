@@ -9,10 +9,7 @@ REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 
-print(f"REDIS_IP: {REDIS_IP}")
-print(f"REDIS_PORT: {REDIS_PORT}")
-print(f"REDIS_PASSWORD: {REDIS_PASSWORD}")
-print(f"MONGO_URI: {MONGO_URI}")
+
 class RedisSingleton:
     _instance: typing.Optional[aioredis.Redis] = None
 

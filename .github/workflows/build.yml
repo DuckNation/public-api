@@ -13,9 +13,9 @@ jobs:
 
       - name: Build Docker image
         env:
-            REDIS_IP: ${{ secrets.REDIS_IP }}
-            REDIS_PORT: ${{ secrets.REDIS_PORT }}
-            REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-            MONGO_URI: ${{ secrets.MONGO_URI }}
+          REDIS_IP: ${{ secrets.REDIS_IP }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: docker build --build-arg REDIS_IP=$REDIS_IP --build-arg REDIS_PORT=$REDIS_PORT --build-arg REDIS_PASSWORD=$REDIS_PASSWORD --build-arg MONGO_URI=$MONGO_URI -t public-api:latest .
 
