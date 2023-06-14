@@ -24,5 +24,5 @@ async def verify_api_key(api_key: str = Depends(api_key_header), redis=Depends(R
     return api_key
 
 
-router.include_router(verification_router)
+router.include_router(verification_router, dependencies=[Depends(verify_api_key)])
 router.include_router(wss_router, dependencies=[Depends(verify_api_key)])
