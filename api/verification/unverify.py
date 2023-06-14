@@ -8,6 +8,7 @@ router = APIRouter()
 async def unverify_endpoint(uid: int | str):
     instance = await MongoSingleton.get_instance()
     if isinstance(uid, str):
+        uid = uid.upper().replace("-", "")
         await instance.minecraft.users.delete_one({"_id": uid})
         return {"message": "<green>Unverification successful"}
     else:
