@@ -1,11 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi.errors import RateLimitExceeded
 
 from api import router as protected_api
 from database import RedisSingleton
-from slowapi import Limiter, _rate_limit_exceeded_handler
 
 app = FastAPI(title="Quacking API", version="0.0.1")
 
