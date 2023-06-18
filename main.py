@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import router as protected_api
-from database import RedisSingleton
+from database import RedisSingleton, MongoSingleton
 
 app = FastAPI(title="Quacking API", version="0.0.1")
 
@@ -25,6 +25,7 @@ app.include_router(
 @app.on_event("shutdown")
 async def shutdown_event():
     await RedisSingleton.close_redis_connection()
+    await MongoSingleton.close_mongo_connection()
 
 
 if __name__ == "__main__":

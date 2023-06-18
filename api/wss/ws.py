@@ -5,6 +5,7 @@ import async_timeout
 from redis.asyncio.client import PubSub
 from starlette.websockets import WebSocket, WebSocketDisconnect
 
+from api.verification.auth import verify_ws_api_key
 from database import RedisSingleton
 from utils.APIRouter import APIRouter
 
@@ -81,4 +82,3 @@ async def websocket_endpoint(channel: str, websocket: WebSocket):
         websocket_clients.remove(client)
         if channel not in [c.channel for c in websocket_clients]:
             await unsubscribe_redis_channel(channel)
-
