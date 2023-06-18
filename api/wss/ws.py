@@ -1,4 +1,5 @@
 import asyncio
+import uuid
 
 import async_timeout
 from redis.asyncio.client import PubSub
@@ -15,6 +16,7 @@ websocket_clients: set["Client"] = set()
 
 class Client:
     def __init__(self, websocket: WebSocket, channel):
+        self.id = str(uuid.uuid4())
         self.websocket = websocket
         self.channel = channel
 
@@ -34,7 +36,13 @@ async def process_redis_messages(channel):
             async with async_timeout.timeout(0.01):
                 message = await subscription.get_message(ignore_subscribe_messages=True)
                 if message:
-                    await send_message_to_clients(channel, bytes(message["data"]).decode("utf-8"))
+                    decoded_message = bytes(message["data"]).decode("utf-8")
+                    parts = decoded_message.rsplit(":", maxsplit=1)
+
+                    if len(parts) == 2:
+                        await send_message_to_clients(channel, parts[0], parts[1])
+                    else:
+                        print("Invalid message received: " + decoded_message)
                 await asyncio.sleep(0.01)
         except asyncio.TimeoutError:
             pass
@@ -44,8 +52,8 @@ async def process_redis_messages(channel):
                 break
 
 
-async def send_message_to_clients(channel, message):
-    clients = [client for client in websocket_clients if client.channel == channel]
+async def send_message_to_clients(channel, message, sender):
+    clients = [client for client in websocket_clients if client.channel == channel if client.id != sender]
     for client in clients:
         await client.websocket.send_text(message)
 
@@ -66,7 +74,7 @@ async def websocket_endpoint(channel: str, websocket: WebSocket):
         instance = await RedisSingleton.get_instance()
         while True:
             data = await websocket.receive_text()
-            await instance.publish(channel, data)
+            await instance.publish(channel, data + ":" + client.id)
     except WebSocketDisconnect:
         pass
     finally:
