@@ -1,0 +1,19 @@
+from fastapi import APIRouter
+
+from database import MongoSingleton
+
+router = APIRouter()
+
+
+@router.get("/get", status_code=200)
+async def get_endpoint(uuid: str):
+    instance = await MongoSingleton.get_instance()
+    uuid = uuid.upper().replace("-", "")
+    query = {"players": {"$in": [uuid]}}
+    results = instance.minecraft.chats.find(query)
+    chats = []
+
+    async for result in results:
+        chats.append({result['name']: result['_id']})
+
+    return chats
