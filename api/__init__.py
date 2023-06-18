@@ -3,7 +3,6 @@ from fastapi.security import APIKeyHeader
 
 from api.verification import router as verification_router
 from api.wss import router as wss_router
-from api.info import router as info_router
 from database import RedisSingleton
 from utils.APIRouter import APIRouter
 from .verification import verify, create_pin, unverify
