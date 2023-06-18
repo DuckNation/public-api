@@ -30,6 +30,7 @@ async def get_api_key(req: WebSocket | Request) -> str | None:
 
     return api_key
 
+
 async def is_valid_api_key(api_key: str, redis):
     result = await redis.sismember("api-keys", api_key)
     return result

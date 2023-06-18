@@ -5,7 +5,6 @@ import async_timeout
 from redis.asyncio.client import PubSub
 from starlette.websockets import WebSocket, WebSocketDisconnect
 
-from api.verification.auth import verify_ws_api_key
 from database import RedisSingleton
 from utils.APIRouter import APIRouter
 
