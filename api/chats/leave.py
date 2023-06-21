@@ -1,7 +1,6 @@
 import pymongo
 from fastapi import APIRouter, HTTPException, Depends
 
-from database import MongoSingleton
 from utils.utils import get_mongo_instance, format_uuid_args
 
 router = APIRouter()

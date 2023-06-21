@@ -2,7 +2,7 @@ import pymongo
 from fastapi import APIRouter, HTTPException, Depends
 
 from api.chats.Chat import Chat
-from utils.utils import get_mongo_instance, format_uuid, format_uuid_args
+from utils.utils import get_mongo_instance, format_uuid_args
 
 router = APIRouter()
 

@@ -4,7 +4,6 @@ import pymongo
 from fastapi import APIRouter, HTTPException, Depends
 
 from api.chats.Chat import Chat
-from database import MongoSingleton
 from utils.utils import format_uuid_args, get_mongo_instance
 
 router = APIRouter()

@@ -1,11 +1,11 @@
 from fastapi import Depends
 
+from api.auth.auth import verify_http_api_key, verify_ws_api_key
+from api.chats import router as chat_router
 from api.verification import router as verification_router
 from api.wss import router as wss_router
-from api.chats import router as chat_router
 from utils.APIRouter import APIRouter
 from .verification import verify, create_pin, unverify
-from api.auth.auth import verify_http_api_key, verify_ws_api_key
 
 router = APIRouter(prefix="/api", tags=["Protected API"])
 

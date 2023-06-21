@@ -1,8 +1,8 @@
+import os
 import typing
 
 import motor.motor_asyncio
 from redis import asyncio as aioredis
-import os
 
 REDIS_IP = os.getenv("REDIS_IP", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", 6379)
