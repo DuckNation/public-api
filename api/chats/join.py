@@ -12,6 +12,7 @@ router = APIRouter()
 async def join_endpoint(name: str, uuid: str, password: Optional[str] = None):
     instance = await MongoSingleton.get_instance()
     uuid = uuid.upper().replace("-", "")
+    name = name.lower()
     exists = await instance.minecraft.chats.find_one({"name": name})
     if not exists:
         raise HTTPException(status_code=400,
