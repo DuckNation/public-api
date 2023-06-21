@@ -10,6 +10,7 @@ router = APIRouter()
 async def block_endpoint(name: str, uuid: str, victim: str):
     instance = await MongoSingleton.get_instance()
     uuid = uuid.upper().replace("-", "")
+    name = name.lower()
     exists = await instance.minecraft.chats.find_one({"name": name})
     if not exists:
         raise HTTPException(status_code=400,
