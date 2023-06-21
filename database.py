@@ -27,7 +27,7 @@ class RedisSingleton:
         return await aioredis.from_url(
             f"redis://{REDIS_IP}:{REDIS_PORT}",
             username="default",
-            password=REDIS_PASSWORD
+            password=REDIS_PASSWORD,
         )
 
     @classmethod

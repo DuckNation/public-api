@@ -5,7 +5,7 @@ from api.wss import router as wss_router
 from api.chats import router as chat_router
 from utils.APIRouter import APIRouter
 from .verification import verify, create_pin, unverify
-from .verification.auth import verify_http_api_key, verify_ws_api_key
+from api.auth.auth import verify_http_api_key, verify_ws_api_key
 
 router = APIRouter(prefix="/api", tags=["Protected API"])
 

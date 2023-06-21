@@ -53,7 +53,12 @@ async def process_redis_messages(channel):
 
 
 async def send_message_to_clients(channel, message, sender):
-    clients = [client for client in websocket_clients if client.channel == channel if client.id != sender]
+    clients = [
+        client
+        for client in websocket_clients
+        if client.channel == channel
+        if client.id != sender
+    ]
     for client in clients:
         await client.websocket.send_text(message)
 

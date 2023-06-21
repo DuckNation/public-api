@@ -7,7 +7,7 @@ from database import RedisSingleton, MongoSingleton
 
 app = FastAPI(title="Quacking API", version="0.0.1")
 
-origins = ['*']
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,9 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(
-    protected_api
-)
+app.include_router(protected_api)
 
 
 @app.on_event("shutdown")

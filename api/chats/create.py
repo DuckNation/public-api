@@ -18,7 +18,7 @@ async def create_endpoint(
     password: Optional[str] = None,
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
-    name = name.lower()
+    name = name.lower().replace(" ", "-")[0:20]  # Max length of 20
     uuid = format_uuid_args(uuid)
     exists = await instance.minecraft.chats.find_one({"name": name})
     if exists:

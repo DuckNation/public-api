@@ -16,4 +16,6 @@ async def verify_endpoint(uid: int, pin: str, response: Response):
     entry["uid"] = uid
     del entry["pin"]
     await instance.minecraft.users.replace_one({"pin": pin}, entry, upsert=True)
-    return {"message": f"Verification successful. You are now verified as {entry['username']}."}
+    return {
+        "message": f"Verification successful. You are now verified as {entry['username']}."
+    }

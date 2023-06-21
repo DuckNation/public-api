@@ -6,7 +6,9 @@ from starlette.websockets import WebSocket
 from database import RedisSingleton
 
 
-async def verify_ws_api_key(websocket: WebSocket, redis=Depends(RedisSingleton.get_instance)):
+async def verify_ws_api_key(
+    websocket: WebSocket, redis=Depends(RedisSingleton.get_instance)
+):
     api_key = await get_api_key(websocket)
 
     if api_key is None:
@@ -36,7 +38,9 @@ async def is_valid_api_key(api_key: str, redis):
     return result
 
 
-async def verify_http_api_key(request: Request, redis=Depends(RedisSingleton.get_instance)):
+async def verify_http_api_key(
+    request: Request, redis=Depends(RedisSingleton.get_instance)
+):
     api_key = await get_api_key(request)
 
     if api_key is None:

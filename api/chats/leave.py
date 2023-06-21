@@ -14,7 +14,7 @@ async def leave_endpoint(
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid_args(uuid)
-    name = name.lower()
+    name = name.lower().replace(" ", "-")[0:20]  # Max length of 20
     exists = await instance.minecraft.chats.find_one({"name": name})
     if not exists:
         raise HTTPException(
