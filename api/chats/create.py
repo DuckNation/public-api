@@ -12,6 +12,7 @@ router = APIRouter()
 @router.post("/create", status_code=200, response_model=Chat)
 async def create_endpoint(name: str, uuid: str, password: Optional[str] = None):
     instance = await MongoSingleton.get_instance()
+    name = name.lower()
     uuid = uuid.upper().replace("-", "")
     exists = await instance.minecraft.chats.find_one({"name": name})
     if exists:
