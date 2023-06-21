@@ -15,7 +15,8 @@ async def discord_endpoint(chat_uuid: str, channel_id: Optional[int] = None):
     if not exists:
         raise HTTPException(status_code=400, detail=f"Chat doesn't seem to exist.")
 
-    exists['discord_id'] = channel_id
+    if not 'discord_id' in exists:
+        exists['discord_id'] = channel_id
 
     chat = Chat(**exists)
 
