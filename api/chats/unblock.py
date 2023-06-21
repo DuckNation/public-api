@@ -11,6 +11,7 @@ async def unblock_endpoint(name: str, uuid: str, victim: str):
     instance = await MongoSingleton.get_instance()
     uuid = uuid.upper().replace("-", "")
     exists = await instance.minecraft.chats.find_one({"name": name})
+    name = name.lower()
     if not exists:
         raise HTTPException(status_code=400,
                             detail=f"<red>A chat by the name of <yellow>{name}</yellow> does not exist.")
