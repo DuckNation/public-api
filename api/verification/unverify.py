@@ -12,12 +12,21 @@ async def unverify_endpoint(
         instance: pymongo.MongoClient = Depends(get_mongo_instance),
 
 ):
-    raise HTTPException(status_code=404, detail="This endpoint is currently disabled.")
-    # todo remove from chat channels before finishing unverify
-    # if isinstance(uid, str):
-    #     uid = format_uuid(uid)
-    #     await instance.minecraft.users.delete_one({"_id": uid})
-    #     return {"message": "<green>Unverification successful"}
-    # else:
-    #     await instance.minecraft.users.delete_one({"uid": uid})
-    #     return {"message": "Unverification successful"}
+    try:
+        int(uid)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="You may only run this command on Discord!")
+
+    username = await instance.minecraft.users.find_one({"uid": uid})
+    if not username:
+        raise HTTPException(status_code=404, detail="You aren't verified.")
+    uuid = format_uuid(username["_id"])
+
+    await instance.minecraft.users.update_one({"uid": uid}, {"$unset": {"uid": ""}})
+    results = instance.minecraft.chats.find({"players": {"$in": [uuid]}})
+    chats = []
+
+    async for result in results:
+        chats.append({result["name"]: result["_id"]})
+
+    return chats

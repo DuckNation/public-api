@@ -21,7 +21,7 @@ async def create_pin(
 ):
     uuid = format_uuid(uuid)
     exists = await instance.minecraft.users.find_one({"username": username})
-    pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     data = {"username": username, "pin": pin, "_id": uuid}
     if exists:
         if "pin" not in exists:
