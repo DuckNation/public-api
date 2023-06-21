@@ -19,7 +19,7 @@ async def create_endpoint(name: str, uuid: str, password: Optional[str] = None):
         raise HTTPException(status_code=400,
                             detail=f"<red>A chat by the name of <yellow>{name}</yellow> already exists.")
 
-    if await instance.minecraft.chats.count_documents({"owner": uuid}) > 1:
+    if await instance.minecraft.chats.count_documents({"owner": uuid}) >= 1:
         raise HTTPException(status_code=400, detail=f"<red>You already own a chat.")
 
     _dict = {
