@@ -7,6 +7,7 @@ from .get_chats_for import router as get_router
 from .join import router as join_router
 from .leave import router as leave_router
 from .unblock import router as unblock_router
+from .set_discord import router as discord_router
 
 router = APIRouter(prefix="/chats")
 router.include_router(create_router)
@@ -16,3 +17,4 @@ router.include_router(password_router)
 router.include_router(block_router)
 router.include_router(unblock_router)
 router.include_router(get_router)
+router.include_router(discord_router)
