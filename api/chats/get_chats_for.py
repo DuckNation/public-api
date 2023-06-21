@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 @router.get("/get", status_code=200)
-async def get_endpoint(uuid: Optional[str]):
+async def get_endpoint(uuid: Optional[str] = None, chat_uuid: Optional[str] = None):
     instance = await MongoSingleton.get_instance()
     if uuid:
         uuid = uuid.upper().replace("-", "")
@@ -20,10 +20,13 @@ async def get_endpoint(uuid: Optional[str]):
             chats.append({result['name']: result['_id']})
 
     else:
-        results = instance.minecraft.chats.find()
+        if chat_uuid:
+            results = instance.minecraft.chats.find({"_id": chat_uuid})
+        else:
+            results = instance.minecraft.chats.find()
         chats = []
 
         async for result in results:
-            chats.append({result['name']: result['_id']})
+            chats.append(result)
 
     return chats

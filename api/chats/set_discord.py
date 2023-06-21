@@ -9,16 +9,15 @@ router = APIRouter()
 
 
 @router.put("/set-discord", status_code=200, response_model=Chat)
-async def discord_endpoint(chat_uuid: str, channel_id: Optional[int] = None):
+async def discord_endpoint(chat_uuid: str, channel_id: int = None):
     instance = await MongoSingleton.get_instance()
     exists = await instance.minecraft.chats.find_one({"_id": chat_uuid})
     if not exists:
         raise HTTPException(status_code=400, detail=f"Chat doesn't seem to exist.")
 
-    if not 'discord_id' in exists:
-        exists['discord_id'] = channel_id
+    exists['discord_id'] = channel_id
 
     chat = Chat(**exists)
 
-    await instance.minecraft.chats.replace_one({"_id": exists['_id']}, chat.dict(), upsert=True)
+    await instance.minecraft.chats.replace_one({"_id": exists['_id']}, exists, upsert=True)
     return chat
