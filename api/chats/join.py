@@ -14,6 +14,7 @@ async def join_endpoint(
     name: str,
     uuid: str,
     password: Optional[str] = None,
+
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid_args(uuid)

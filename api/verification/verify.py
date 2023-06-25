@@ -18,6 +18,7 @@ async def verify_endpoint(
         raise HTTPException(status_code=404, detail="Pin not found.")
     entry["uid"] = uid
     del entry["pin"]
+    entry["permissions"] = ["duck.chat"]
     await instance.minecraft.users.replace_one({"pin": pin}, entry, upsert=True)
     return {
         "message": f"Verification successful. You are now verified as {entry['username']}."

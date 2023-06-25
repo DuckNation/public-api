@@ -25,14 +25,14 @@ async def create_pin(
     data = {"username": username, "pin": pin, "_id": uuid}
     if exists:
         if "pin" not in exists:
-            raise HTTPException(status_code=400, detail=f"<red>Your username is already registered. Run "
-                                                        f"<yellow><click:suggest_command:'/unverify'>"
-                                                        f"/unverify</click></yellow> to "
-                                                        f"unverify your account.")
+            raise HTTPException(status_code=400, detail=f"<red>Your username is already registered. "
+                                                        f"Run <aqua>.unverify</aqua> on "
+                                                        f"discord to unverify!")
         else:
-            data["pin"] = exists["pin"]
+            data = exists
+            data["pin"] = pin
             del data["_id"]
-    await instance.minecraft.users.insert_one(data)
+    await instance.minecraft.users.replace_one({"_id": uuid}, data, upsert=True)
     return {
         "message": f"<yellow>Success! Go back to the discord server "
                    f"(<click:open_url:'https://discord.quack.boo'><green>https://discord.quack.boo</green></click>) "
