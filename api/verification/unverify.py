@@ -7,7 +7,7 @@ from utils.utils import get_mongo_instance, format_uuid
 router = APIRouter()
 
 
-@router.delete("/unverify", status_code=200)
+@router.delete("/unverify", status_code=200, description="Unverify a user.")
 async def unverify_endpoint(
         uid: int | str,
         instance: pymongo.MongoClient = Depends(get_mongo_instance),

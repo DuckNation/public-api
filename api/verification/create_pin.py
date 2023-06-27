@@ -12,7 +12,7 @@ router = APIRouter()
 # limiter = Limiter(key_func=ok, default_limits=["2/5seconds"])
 
 
-@router.post("/create-pin", status_code=200)
+@router.post("/create-pin", status_code=200, description="Create a pin to verify your account.")
 # @limiter.shared_limit(limit_value="2/10second", scope="verification")
 async def create_pin(
         username: str,

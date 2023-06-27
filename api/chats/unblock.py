@@ -7,7 +7,7 @@ from utils.utils import get_mongo_instance, format_uuid_args
 router = APIRouter()
 
 
-@router.put("/unblock", status_code=200, response_model=Chat)
+@router.put("/unblock", status_code=200, response_model=Chat, description="Unblock a user from a chat.")
 async def unblock_endpoint(
     name: str,
     uuid: str,

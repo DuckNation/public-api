@@ -6,7 +6,7 @@ from utils.utils import get_mongo_instance, format_uuid_args
 router = APIRouter()
 
 
-@router.delete("/leave", status_code=200)
+@router.delete("/leave", status_code=200, description="Leave a chat.")
 async def leave_endpoint(
     name: str,
     uuid: str,

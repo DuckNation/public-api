@@ -9,7 +9,7 @@ from utils.utils import format_uuid_args, get_mongo_instance
 router = APIRouter()
 
 
-@router.post("/join", status_code=200, response_model=Chat)
+@router.post("/join", status_code=200, response_model=Chat, description="Join a chat.")
 async def join_endpoint(
     name: str,
     uuid: str,

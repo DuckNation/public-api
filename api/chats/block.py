@@ -7,7 +7,7 @@ from utils.utils import get_mongo_instance, format_uuid_args
 router = APIRouter()
 
 
-@router.put("/block", status_code=200, response_model=Chat)
+@router.put("/block", status_code=200, response_model=Chat, description="Block a player from a chat.")
 async def block_endpoint(
     # name: str,
     victim: str,

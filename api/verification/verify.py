@@ -6,7 +6,7 @@ from utils.utils import get_mongo_instance
 router = APIRouter()
 
 
-@router.post("/verify", status_code=200)
+@router.post("/verify", status_code=200, description="Verify a user.")
 async def verify_endpoint(
         uid: int,
         pin: str,

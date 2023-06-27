@@ -8,7 +8,7 @@ from utils.utils import format_uuid_args, get_mongo_instance
 router = APIRouter()
 
 
-@router.get("/get", status_code=200)
+@router.get("/get", status_code=200, description="Get a list of chats.")
 async def get_endpoint(
         uuid: Optional[str] = None,
         chat_uuid: Optional[str] = None,
