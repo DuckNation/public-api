@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.11.4-alpine3.18
 
 ARG REDIS_IP
 ARG REDIS_PORT
