@@ -9,7 +9,12 @@ from utils.utils import get_mongo_instance, format_uuid_args
 router = APIRouter()
 
 
-@router.put("/password", status_code=200, response_model=Chat, description="Change the password of a chat.")
+@router.put(
+    "/password",
+    status_code=200,
+    response_model=Chat,
+    description="Change the password of a chat.",
+)
 async def password_endpoint(
     uuid: str,
     password: Optional[str] = None,

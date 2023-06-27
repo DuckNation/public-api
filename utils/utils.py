@@ -28,8 +28,10 @@ def format_uuid_args(*args) -> list | str:
     return [format_uuid(arg) for arg in args]
 
 
-async def get_user_object(uid: int | str = Query(...),
-                          instance: pymongo.MongoClient = Depends(get_mongo_instance)) -> "Player":
+async def get_user_object(
+    uid: int | str = Query(...),
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+) -> "Player":
     if isinstance(uid, str):
         try:
             uid = format_uuid(uid)
@@ -46,4 +48,5 @@ async def get_user_object(uid: int | str = Query(...),
         raise HTTPException(status_code=404, detail="User not found.")
 
     from api.info.Player import Player
+
     return Player(**stats)

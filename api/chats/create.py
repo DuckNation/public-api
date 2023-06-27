@@ -10,7 +10,9 @@ from utils.utils import format_uuid_args, get_mongo_instance
 router = APIRouter()
 
 
-@router.post("/create", status_code=200, response_model=Chat, description="Create a chat.")
+@router.post(
+    "/create", status_code=200, response_model=Chat, description="Create a chat."
+)
 async def create_endpoint(
     name: str,
     uuid: str,

@@ -9,14 +9,15 @@ router = APIRouter()
 
 @router.delete("/unverify", status_code=200, description="Unverify a user.")
 async def unverify_endpoint(
-        uid: int | str,
-        instance: pymongo.MongoClient = Depends(get_mongo_instance),
-
+    uid: int | str,
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     try:
         int(uid)
     except ValueError:
-        raise HTTPException(status_code=400, detail="You may only run this command on Discord!")
+        raise HTTPException(
+            status_code=400, detail="You may only run this command on Discord!"
+        )
 
     player = await instance.minecraft.users.find_one({"uid": uid})
     if not player:
@@ -28,7 +29,9 @@ async def unverify_endpoint(
     player_obj.uid = None
     uuid = format_uuid(player["_id"])
 
-    await instance.minecraft.users.replace_one({"uid": uid}, player_obj.dict(), upsert=True)
+    await instance.minecraft.users.replace_one(
+        {"uid": uid}, player_obj.dict(), upsert=True
+    )
     results = instance.minecraft.chats.find({"players": {"$in": [uuid]}})
     chats = []
 

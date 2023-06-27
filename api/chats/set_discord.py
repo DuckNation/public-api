@@ -7,7 +7,12 @@ from utils.utils import get_mongo_instance, format_uuid_args
 router = APIRouter()
 
 
-@router.put("/set-discord", status_code=200, response_model=Chat, description="Set the discord channel of a chat.")
+@router.put(
+    "/set-discord",
+    status_code=200,
+    response_model=Chat,
+    description="Set the discord channel of a chat.",
+)
 async def discord_endpoint(
     chat_uuid: str,
     channel_id: int = None,
