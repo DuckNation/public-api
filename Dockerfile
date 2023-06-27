@@ -1,4 +1,4 @@
-FROM python:3.11 AS builder
+FROM python:3.11
 
 ARG REDIS_IP
 ARG REDIS_PORT
@@ -17,12 +17,6 @@ COPY requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir -r /code/requirements.txt
 
 COPY . /code
-
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY --from=builder /code /app
 
 EXPOSE 6420
 
