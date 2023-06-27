@@ -18,6 +18,7 @@ class Player(BaseModel):
     play_time: int = Field(-1, alias="playTime")
     settings: dict[str, str | int] = {}
     fly_time: int = Field(-1, alias="flyTime")
+    permissions: List[str] = []
 
     server_stats: dict[str, str | int] = Field({}, alias="serverStats")
 

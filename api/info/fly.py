@@ -10,8 +10,7 @@ router = APIRouter()
 
 @router.get("/fly", status_code=200, response_model=dict)
 async def get_fly_time(
-        player: Player = Depends(get_user_object),
-        instance: pymongo.MongoClient = Depends(get_mongo_instance)
+        player: Player = Depends(get_user_object)
 ):
     return {
         "flyTime": player.fly_time,
