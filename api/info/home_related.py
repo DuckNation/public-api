@@ -52,6 +52,11 @@ async def remove_home(
             status_code=400, detail="You do not have a home by that name."
         )
     else:
-        player.saved_homes.remove(home)
+        try:
+            player.saved_homes.remove(home)
+        except ValueError:
+            return HTTPException(
+                status_code=400, detail="That home wasn't found! Contact haappi if this persists."
+            )
         await player.save(instance)
         return player.saved_homes
