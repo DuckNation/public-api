@@ -6,6 +6,7 @@ from fastapi import Request, Query, Depends, HTTPException
 
 if typing.TYPE_CHECKING:
     from api.info.Player import Player
+    from api.chats.Chat import Chat
 
 from database import MongoSingleton
 
@@ -29,8 +30,8 @@ def format_uuid_args(*args) -> list | str:
 
 
 async def get_user_object(
-    uid: int | str = Query(...),
-    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+        uid: int | str = Query(...),
+        instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ) -> "Player":
     if isinstance(uid, str):
         try:
@@ -50,3 +51,27 @@ async def get_user_object(
     from api.info.Player import Player
 
     return Player(**stats)
+
+
+async def get_chat_object(
+        uid: int | str = Query(...),
+        instance: pymongo.MongoClient = Depends(get_mongo_instance),
+) -> "Chat":
+    if isinstance(uid, str):
+        try:
+            uid = format_uuid(uid)
+        except ValueError:
+            pass
+        if len(uid) == 36:  # uuid
+            stats = await instance.minecraft.chats.find_one({"_id": uid})
+        else:
+            stats = await instance.minecraft.chats.find_one({"name": uid})
+    else:
+        stats = await instance.minecraft.chats.find_one({"discordId": uid})
+
+    if not stats:
+        raise HTTPException(status_code=404, detail="Chat not found.")
+
+    from api.chats.Chat import Chat
+
+    return Chat(**stats)
