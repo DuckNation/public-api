@@ -2,12 +2,15 @@ import os
 import typing
 
 import motor.motor_asyncio
+from dotenv import load_dotenv
 from redis import asyncio as aioredis
 
-REDIS_IP = os.getenv("REDIS_IP", "localhost")
-REDIS_PORT = os.getenv("REDIS_PORT", 6379)
-REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+load_dotenv()
+
+REDIS_IP = os.getenv("REDIS_IP")
+REDIS_PORT = os.getenv("REDIS_PORT")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+MONGO_URI = os.getenv("MONGO_URI")
 
 
 class RedisSingleton:
