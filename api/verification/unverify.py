@@ -25,7 +25,4 @@ async def unverify_endpoint(
     async for result in results:
         chats.append({result["name"]: result["_id"]})
 
-    return {
-        "player_uuid": saved_uuid,
-        "chats": chats
-    }
+    return {"player_uuid": saved_uuid, "chats": chats}
