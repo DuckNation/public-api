@@ -9,8 +9,8 @@ router = APIRouter()
 
 @router.delete("/unverify", status_code=200, description="Unverify a user.")
 async def unverify_endpoint(
-    player: Player = Depends(get_user_object),
-    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+        player: Player = Depends(get_user_object),
+        instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     player.permissions.clear()
     saved_uuid = player.uuid
@@ -20,9 +20,10 @@ async def unverify_endpoint(
     await player.save(instance)
 
     results = instance.minecraft.chats.find({"players": {"$in": [player.uuid]}})
-    chats = []
 
     async for result in results:
-        chats.append({result["name"]: result["_id"]})
+        await instance.minecraft.chats.update_one(
+            {"_id": result["_id"]}, {"$pull": {"players": player.uuid}}  # pull = remove
+        )
 
-    return {"player_uuid": saved_uuid, "chats": chats}
+    return {"player_uuid": saved_uuid}
