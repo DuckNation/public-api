@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pymongo
 from fastapi import Depends
 
@@ -19,9 +21,9 @@ async def stats_endpoint(
 async def update_endpoint(
     player: Player = Depends(get_user_object),
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
-    loginTime: [int, None] = None,
-    logoutTime: [int, None] = None,
-    playTime: [int, None] = None,
+    loginTime: Optional[int] = None,
+    logoutTime: Optional[int] = None,
+    playTime: Optional[int] = None,
 ):
     if loginTime is not None:
         player.login_time = loginTime

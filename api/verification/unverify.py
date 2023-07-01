@@ -23,7 +23,7 @@ async def unverify_endpoint(
 
     async for result in results:
         await instance.minecraft.chats.update_one(
-            {"_id": result["_id"]}, {"$pull": {"players": player.uuid}}  # pull = remove
+            {"uuid": result["uuid"]}, {"$pull": {"players": player.uuid}}  # pull = remove
         )
 
     return {"player_uuid": saved_uuid}

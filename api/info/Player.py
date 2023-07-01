@@ -7,7 +7,7 @@ from api.info.Home import Home
 
 
 class Player(BaseModel):
-    uuid: Optional[str] = Field(None, alias="_id")
+    uuid: Optional[str] = None
     username: Optional[str] = None
     uid: Optional[int] = None
     pin: Optional[str] = None
@@ -30,11 +30,11 @@ class Player(BaseModel):
         from utils.utils import format_uuid
 
         uuid = format_uuid(
-            data.get("_id")
+            data.get("uuid")
         )  # should be already formatted, but just in case
 
         if uuid:
-            await instance.minecraft.users.replace_one({"_id": uuid}, data, upsert=True)
+            await instance.minecraft.users.replace_one({"uuid": uuid}, data, upsert=True)
         else:
             raise ValueError("Player does not have a valid UUID.")
 

@@ -39,7 +39,7 @@ async def get_user_object(
         except ValueError:
             pass
         if len(uid) == 36:  # uuid
-            stats = await instance.minecraft.users.find_one({"_id": uid})
+            stats = await instance.minecraft.users.find_one({"uuid": uid})
         else:
             stats = await instance.minecraft.users.find_one({"username": uid})
     else:

@@ -24,7 +24,7 @@ async def create_pin(
     uuid = format_uuid(uuid)
     exists = await instance.minecraft.users.find_one({"username": username})
     pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    data = {"username": username, "pin": pin, "_id": uuid}
+    data = {"username": username, "pin": pin, "uuid": uuid}
     if exists:
         if "pin" not in exists:
             raise HTTPException(
@@ -34,10 +34,8 @@ async def create_pin(
                 f"discord to unverify!",
             )
         else:
-            data = exists
             data["pin"] = pin
-            del data["_id"]
-    await instance.minecraft.users.replace_one({"_id": uuid}, data, upsert=True)
+    await instance.minecraft.users.replace_one({"uuid": uuid}, data, upsert=True)
     return {
         "message": f"<yellow>Success! Go back to the discord server "
         f"(<click:open_url:'https://discord.quack.boo'><green>https://discord.quack.boo</green></click>) "
