@@ -1,6 +1,7 @@
 import pymongo
 from fastapi import APIRouter, Depends, HTTPException
 
+from api.info.Player import Player
 from utils.utils import get_mongo_instance
 
 router = APIRouter()
@@ -24,7 +25,8 @@ async def verify_endpoint(
     entry["uid"] = uid
     del entry["pin"]
     entry["permissions"] = ["duck.chat"]
-    await instance.minecraft.users.replace_one({"pin": pin}, entry, upsert=True)
+    player = Player(**entry)
+    await instance.minecraft.users.replace_one({"pin": pin}, player, upsert=True)
     return {
         "message": f"Verification successful. You are now verified as {entry['username']}."
     }
