@@ -48,8 +48,8 @@ async def get_endpoint(
 
 @router.get("/better-get", status_code=200, description="Get a list of chats.")
 async def better_get_endpoint(
-        instance: pymongo.MongoClient = Depends(get_mongo_instance),
-        chat_uuid: Optional[str] = None,
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+    chat_uuid: Optional[str] = None,
 ):
     if chat_uuid:
         try:
@@ -63,9 +63,11 @@ async def better_get_endpoint(
         chats = []
         results = instance.minecraft.chats.find()
         async for result in results:
-            chats.append({
-                "name": result["name"],
-                "uuid": result["_id"],
-                "discordId": result["discordId"] if "discordId" in result else None
-            })
+            chats.append(
+                {
+                    "name": result["name"],
+                    "uuid": result["_id"],
+                    "discordId": result["discordId"] if "discordId" in result else None,
+                }
+            )
         return chats
