@@ -26,7 +26,7 @@ async def create_pin(
     pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     data = {"username": username, "pin": pin, "uuid": uuid}
     if exists:
-        if not exists['pin']:
+        if not exists["pin"]:
             raise HTTPException(
                 status_code=400,
                 detail=f"<red>Your username is already registered. "

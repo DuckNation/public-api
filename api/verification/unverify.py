@@ -9,8 +9,8 @@ router = APIRouter()
 
 @router.delete("/unverify", status_code=200, description="Unverify a user.")
 async def unverify_endpoint(
-        player: Player = Depends(get_user_object),
-        instance: pymongo.MongoClient = Depends(get_mongo_instance),
+    player: Player = Depends(get_user_object),
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     player.permissions.clear()
     saved_uuid = player.uuid
