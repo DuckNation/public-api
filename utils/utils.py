@@ -30,8 +30,8 @@ def format_uuid_args(*args) -> list | str:
 
 
 async def get_user_object(
-        uid: int | str = Query(...),
-        instance: pymongo.MongoClient = Depends(get_mongo_instance),
+    uid: int | str = Query(...),
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ) -> "Player":
     from api.info.Player import Player
 
@@ -68,8 +68,8 @@ async def get_user_object(
 
 
 async def get_chat_object(
-        uid: int | str = Query(...),
-        instance: pymongo.MongoClient = Depends(get_mongo_instance),
+    uid: int | str = Query(...),
+    instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ) -> "Chat":
     if isinstance(uid, str):
         try:
