@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from .fly import router as fly_router
-from .get import router as get_router
+from .stats import router as get_router
 from .home_related import router as home_router
 from .permissions import router as permission_router
 from .settings import router as setting_router
