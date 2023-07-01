@@ -30,9 +30,11 @@ def format_uuid_args(*args) -> list | str:
 
 
 async def get_user_object(
-    uid: int | str = Query(...),
-    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+        uid: int | str = Query(...),
+        instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ) -> "Player":
+    from api.info.Player import Player
+
     if isinstance(uid, str):
         try:
             uid = format_uuid(uid)
@@ -50,12 +52,24 @@ async def get_user_object(
 
     from api.info.Player import Player
 
+    """ code for creating a new user if not found
+    - somehow make this merge the newly created uuid from create-pin and the alrady existing one
+        if not stats:
+        try:
+            int(uid)
+        except ValueError:
+            raise HTTPException(status_code=404, detail="User not found.")
+        else:
+            player = Player(uid=uid)
+            await player.save(instance)
+            return player"""
+
     return Player(**stats)
 
 
 async def get_chat_object(
-    uid: int | str = Query(...),
-    instance: pymongo.MongoClient = Depends(get_mongo_instance),
+        uid: int | str = Query(...),
+        instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ) -> "Chat":
     if isinstance(uid, str):
         try:
