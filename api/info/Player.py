@@ -28,16 +28,20 @@ class Player(BaseModel):
     async def save(self, instance: pymongo.MongoClient):
         data = self.dict()
 
-        if data['uuid']:
+        if data["uuid"]:
             from utils.utils import format_uuid
 
             uuid = format_uuid(
                 data.get("uuid")
             )  # should be already formatted, but just in case
-            await instance.minecraft.users.replace_one({"uuid": uuid}, data, upsert=True)
+            await instance.minecraft.users.replace_one(
+                {"uuid": uuid}, data, upsert=True
+            )
 
         else:
-            await instance.minecraft.users.replace_one({"uid": self.uid}, data, upsert=True)
+            await instance.minecraft.users.replace_one(
+                {"uid": self.uid}, data, upsert=True
+            )
 
     @property
     def exists(self) -> bool:
