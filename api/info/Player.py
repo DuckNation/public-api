@@ -34,12 +34,12 @@ class Player(BaseModel):
             uuid = format_uuid(
                 data.get("uuid")
             )  # should be already formatted, but just in case
-            await instance.minecraft.users.replace_one(
+            await instance.happy.users.replace_one(
                 {"uuid": uuid}, data, upsert=True
             )
 
         else:
-            await instance.minecraft.users.replace_one(
+            await instance.happy.users.replace_one(
                 {"uid": self.uid}, data, upsert=True
             )
 

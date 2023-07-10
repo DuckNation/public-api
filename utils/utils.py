@@ -46,11 +46,11 @@ async def get_user_object(
         except ValueError:
             pass
         if len(uid) == 36:  # uuid
-            stats = await instance.minecraft.users.find_one({"uuid": uid})
+            stats = await instance.happy.users.find_one({"uuid": uid})
         else:
-            stats = await instance.minecraft.users.find_one({"username": uid})
+            stats = await instance.happy.users.find_one({"username": uid})
     else:
-        stats = await instance.minecraft.users.find_one({"uid": uid})
+        stats = await instance.happy.users.find_one({"uid": uid})
 
     if not stats:
         raise HTTPException(status_code=404, detail="User not found.")
@@ -82,11 +82,11 @@ async def get_chat_object(
         except ValueError:
             pass
         if len(uid) == 36:  # uuid
-            stats = await instance.minecraft.chats.find_one({"_id": uid})
+            stats = await instance.happy.chats.find_one({"_id": uid})
         else:
-            stats = await instance.minecraft.chats.find_one({"name": uid})
+            stats = await instance.happy.chats.find_one({"name": uid})
     else:
-        stats = await instance.minecraft.chats.find_one({"discordId": uid})
+        stats = await instance.happy.chats.find_one({"discordId": uid})
 
     if not stats:
         raise HTTPException(status_code=404, detail="Chat not found.")

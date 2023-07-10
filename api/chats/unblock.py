@@ -20,7 +20,7 @@ async def unblock_endpoint(
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid_args(uuid)
-    exists = await instance.minecraft.chats.find_one({"name": name})
+    exists = await instance.happy.chats.find_one({"name": name})
     name = name.lower()
     if not exists:
         raise HTTPException(
@@ -39,7 +39,7 @@ async def unblock_endpoint(
 
     chat = Chat(**exists)
 
-    await instance.minecraft.chats.replace_one(
+    await instance.happy.chats.replace_one(
         {"_id": exists["_id"]}, chat.dict(), upsert=True
     )
     return chat

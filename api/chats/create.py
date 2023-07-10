@@ -21,14 +21,14 @@ async def create_endpoint(
 ):
     name = name.lower().replace(" ", "-")[0:20]  # Max length of 20
     uuid = format_uuid_args(uuid)
-    exists = await instance.minecraft.chats.find_one({"name": name})
+    exists = await instance.happy.chats.find_one({"name": name})
     if exists:
         raise HTTPException(
             status_code=400,
             detail=f"<red>A chat by the name of <yellow>{name}</yellow> already exists.",
         )
 
-    if await instance.minecraft.chats.count_documents({"owner": uuid}) >= 1:
+    if await instance.happy.chats.count_documents({"owner": uuid}) >= 1:
         raise HTTPException(status_code=400, detail=f"<red>You already own a chat.")
 
     _dict = {
@@ -40,5 +40,5 @@ async def create_endpoint(
         "blockedPlayers": [],
     }
 
-    await instance.minecraft.chats.insert_one(_dict)
+    await instance.happy.chats.insert_one(_dict)
     return Chat(**_dict)

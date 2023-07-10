@@ -23,7 +23,7 @@ class Chat(BaseModel):
         )  # should be already formatted, but just in case
 
         if uuid:
-            await instance.minecraft.chats.replace_one({"_id": uuid}, data, upsert=True)
+            await instance.happy.chats.replace_one({"_id": uuid}, data, upsert=True)
         else:
             raise ValueError("Chat does not have a valid UUID.")
 

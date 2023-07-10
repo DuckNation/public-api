@@ -19,10 +19,10 @@ async def unverify_endpoint(
 
     await player.save(instance)
 
-    results = instance.minecraft.chats.find({"players": {"$in": [player.uuid]}})
+    results = instance.happy.chats.find({"players": {"$in": [player.uuid]}})
 
     async for result in results:
-        await instance.minecraft.chats.update_one(
+        await instance.happy.chats.update_one(
             {"_id": result["_id"]}, {"$pull": {"players": player.uuid}}  # pull = remove
         )
 

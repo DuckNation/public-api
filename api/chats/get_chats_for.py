@@ -21,18 +21,18 @@ async def get_endpoint(
         uuid = format_uuid_args(uuid)
         uuid = uuid.upper().replace("-", "")
         query = {"players": {"$in": [uuid]}}
-        results = instance.minecraft.chats.find(query)
+        results = instance.happy.chats.find(query)
     else:
         if chat_uuid:
             try:
                 chat_uuid = format_uuid_args(chat_uuid)
-                return await instance.minecraft.chats.find_one({"_id": chat_uuid})
+                return await instance.happy.chats.find_one({"_id": chat_uuid})
             except ValueError:
-                return await instance.minecraft.chats.find_one(
+                return await instance.happy.chats.find_one(
                     {"name": chat_uuid.lower().replace(" ", "-")}
                 )
         else:
-            results = instance.minecraft.chats.find()
+            results = instance.happy.chats.find()
 
     async for result in results:
         if uuid_or_id:
@@ -56,9 +56,9 @@ async def better_get_endpoint(
     if chat_uuid:
         try:
             chat_uuid = format_uuid_args(chat_uuid)
-            return await instance.minecraft.chats.find_one({"_id": chat_uuid})
+            return await instance.happy.chats.find_one({"_id": chat_uuid})
         except ValueError:
-            return await instance.minecraft.chats.find_one(
+            return await instance.happy.chats.find_one(
                 {"name": chat_uuid.lower().replace(" ", "-")}
             )
     elif player_uuid:
@@ -67,9 +67,9 @@ async def better_get_endpoint(
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
         query = {"players": {"$in": [uuid]}}
-        results = instance.minecraft.chats.find(query)
+        results = instance.happy.chats.find(query)
     else:
-        results = instance.minecraft.chats.find()
+        results = instance.happy.chats.find()
 
     async for result in results:
         chats.append(

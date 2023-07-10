@@ -14,7 +14,7 @@ async def delete_endpoint(
 ):
     uuid = format_uuid_args(uuid)
     name = name.lower().replace(" ", "-")[0:20]  # Max length of 20
-    exists = await instance.minecraft.chats.find_one({"name": name})
+    exists = await instance.happy.chats.find_one({"name": name})
     if not exists:
         raise HTTPException(
             status_code=400,
@@ -26,5 +26,5 @@ async def delete_endpoint(
             status_code=400, detail=f"<red>You cannot delete a chat you do not own."
         )
 
-    await instance.minecraft.chats.delete_one({"_id": exists["_id"]})
+    await instance.happy.chats.delete_one({"_id": exists["_id"]})
     return {"message": f"You have deleted the chat <yellow>{name}</yellow>."}

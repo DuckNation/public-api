@@ -11,7 +11,7 @@ router = APIRouter()
 async def verify_endpoint(
     uid: int, pin: str, instance: pymongo.MongoClient = Depends(get_mongo_instance)
 ):
-    exists = await instance.minecraft.users.find_one({"uid": uid})
+    exists = await instance.happy.users.find_one({"uid": uid})
     if exists:
         raise HTTPException(
             status_code=400,
@@ -19,14 +19,14 @@ async def verify_endpoint(
         )
 
     pin = pin.upper()
-    entry = await instance.minecraft.users.find_one({"pin": pin})
+    entry = await instance.happy.users.find_one({"pin": pin})
     if not entry:
         raise HTTPException(status_code=404, detail="Pin not found.")
     entry["uid"] = uid
     del entry["pin"]
     entry["permissions"] = ["duck.chat"]
     player = Player(**entry)
-    await instance.minecraft.users.replace_one({"pin": pin}, player.dict(), upsert=True)
+    await instance.happy.users.replace_one({"pin": pin}, player.dict(), upsert=True)
     return {
         "message": f"Verification successful. You are now verified as {entry['username']}."
     }

@@ -21,7 +21,7 @@ async def password_endpoint(
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid_args(uuid)
-    exists = await instance.minecraft.chats.find_one({"owner": uuid})
+    exists = await instance.happy.chats.find_one({"owner": uuid})
     if not exists:
         raise HTTPException(
             status_code=400, detail=f"<red>You don't appear to own a chat."
@@ -31,7 +31,7 @@ async def password_endpoint(
 
     chat.password = password
 
-    await instance.minecraft.chats.replace_one(
+    await instance.happy.chats.replace_one(
         {"_id": exists["_id"]}, chat.dict(), upsert=True
     )
     return chat

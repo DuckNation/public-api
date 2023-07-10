@@ -14,7 +14,7 @@ async def leave_endpoint(
 ):
     uuid = format_uuid_args(uuid)
     name = name.lower().replace(" ", "-")[0:20]  # Max length of 20
-    exists = await instance.minecraft.chats.find_one({"name": name})
+    exists = await instance.happy.chats.find_one({"name": name})
     if not exists:
         raise HTTPException(
             status_code=400,
@@ -29,7 +29,7 @@ async def leave_endpoint(
     if uuid in exists["players"]:
         exists["players"].remove(uuid)
 
-    await instance.minecraft.chats.replace_one(
+    await instance.happy.chats.replace_one(
         {"_id": exists["_id"]}, exists, upsert=True
     )
     return {

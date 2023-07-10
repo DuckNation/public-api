@@ -23,7 +23,7 @@ async def block_endpoint(
         victim, uuid = format_uuid_args(victim, uuid)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"<red>{e}")
-    exists = await instance["minecraft"]["chats"].find_one({"owner": uuid})
+    exists = await instance["happy"]["chats"].find_one({"owner": uuid})
     if not exists:
         raise HTTPException(
             status_code=404,  # todo refactor to add support to manage channels later
@@ -43,7 +43,7 @@ async def block_endpoint(
     if victim not in chat.blocked_players:
         chat.blocked_players.append(victim)
 
-    await instance.minecraft.chats.replace_one(
+    await instance.happy.chats.replace_one(
         {"_id": exists["_id"]}, chat.dict(by_alias=True), upsert=True
     )
     return chat

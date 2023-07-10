@@ -22,7 +22,7 @@ async def create_pin(
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid(uuid)
-    exists = await instance.minecraft.users.find_one({"username": username})
+    exists = await instance.happy.users.find_one({"username": username})
     pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     data = {"username": username, "pin": pin, "uuid": uuid}
     if exists:
@@ -35,7 +35,7 @@ async def create_pin(
             )
         else:
             data["pin"] = pin
-    await instance.minecraft.users.replace_one({"uuid": uuid}, data, upsert=True)
+    await instance.happy.users.replace_one({"uuid": uuid}, data, upsert=True)
     return {
         "message": f"<yellow>Success! Go back to the discord server "
         f"(<click:open_url:'https://discord.quack.boo'><green>https://discord.quack.boo</green></click>) "
