@@ -34,14 +34,10 @@ class Player(BaseModel):
             uuid = format_uuid(
                 data.get("uuid")
             )  # should be already formatted, but just in case
-            await instance.happy.users.replace_one(
-                {"uuid": uuid}, data, upsert=True
-            )
+            await instance.happy.users.replace_one({"uuid": uuid}, data, upsert=True)
 
         else:
-            await instance.happy.users.replace_one(
-                {"uid": self.uid}, data, upsert=True
-            )
+            await instance.happy.users.replace_one({"uid": self.uid}, data, upsert=True)
 
     @property
     def exists(self) -> bool:

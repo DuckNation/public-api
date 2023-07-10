@@ -18,9 +18,7 @@ async def discord_endpoint(
     channel_id: int = None,
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
-    exists = await instance.happy.chats.find_one(
-        {"_id": format_uuid_args(chat_uuid)}
-    )
+    exists = await instance.happy.chats.find_one({"_id": format_uuid_args(chat_uuid)})
     if not exists:
         raise HTTPException(status_code=400, detail=f"Chat doesn't seem to exist.")
 
@@ -28,7 +26,5 @@ async def discord_endpoint(
 
     chat = Chat(**exists)
 
-    await instance.happy.chats.replace_one(
-        {"_id": exists["_id"]}, exists, upsert=True
-    )
+    await instance.happy.chats.replace_one({"_id": exists["_id"]}, exists, upsert=True)
     return chat
