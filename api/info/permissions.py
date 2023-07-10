@@ -18,9 +18,14 @@ async def get_permissions(
 @router.delete("/permissions", status_code=200, response_model=list[str])
 async def clear_permissions(
     player: Player = Depends(get_user_object),
+    permission: [str, None] = None,
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
-    player.permissions = []
+    if permission:
+        if permission in player.permissions:
+            player.permissions.remove(permission)
+    else:
+        player.permissions = []
     await player.save(instance)
     return player.permissions
 
