@@ -29,9 +29,7 @@ async def leave_endpoint(
     if uuid in exists["players"]:
         exists["players"].remove(uuid)
 
-    await instance.happy.chats.replace_one(
-        {"_id": exists["_id"]}, exists, upsert=True
-    )
+    await instance.happy.chats.replace_one({"_id": exists["_id"]}, exists, upsert=True)
     return {
         "message": f"You have left the chat <yellow>{name}</yellow>.",
         "_id": exists["_id"],
