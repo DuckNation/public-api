@@ -1,8 +1,8 @@
 import pymongo
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from api.info.Player import Player
-from utils.utils import get_mongo_instance, format_uuid, get_user_object
+from utils.utils import get_mongo_instance, get_user_object
 
 router = APIRouter()
 

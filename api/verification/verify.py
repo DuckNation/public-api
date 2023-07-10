@@ -26,7 +26,7 @@ async def verify_endpoint(
     del entry["pin"]
     entry["permissions"] = ["duck.chat"]
     player = Player(**entry)
-    await instance.minecraft.users.replace_one({"pin": pin}, player, upsert=True)
+    await instance.minecraft.users.replace_one({"pin": pin}, player.dict(), upsert=True)
     return {
         "message": f"Verification successful. You are now verified as {entry['username']}."
     }

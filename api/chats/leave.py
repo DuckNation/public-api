@@ -32,4 +32,8 @@ async def leave_endpoint(
     await instance.minecraft.chats.replace_one(
         {"_id": exists["_id"]}, exists, upsert=True
     )
-    return {"message": f"You have left the chat <yellow>{name}</yellow>."}
+    return {
+        "message": f"You have left the chat <yellow>{name}</yellow>.",
+        "_id": exists["_id"],
+        "name": exists["name"],
+    }

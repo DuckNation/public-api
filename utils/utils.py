@@ -2,13 +2,14 @@ import typing
 import uuid
 
 import pymongo
+import redis.asyncio
 from fastapi import Request, Query, Depends, HTTPException
 
 if typing.TYPE_CHECKING:
     from api.info.Player import Player
     from api.chats.Chat import Chat
 
-from database import MongoSingleton
+from database import MongoSingleton, RedisSingleton
 
 
 def get_param_from_request(param_name: str, request: Request):
@@ -17,6 +18,10 @@ def get_param_from_request(param_name: str, request: Request):
 
 async def get_mongo_instance() -> pymongo.MongoClient:
     return await MongoSingleton.get_instance()
+
+
+async def get_redis_instance() -> redis.asyncio.Redis:
+    return await RedisSingleton.get_instance()
 
 
 def format_uuid(uuid_str: str) -> str:
