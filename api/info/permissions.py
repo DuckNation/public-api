@@ -4,6 +4,7 @@ import pymongo
 from fastapi import Depends
 
 from api.info.Player import Player
+from database import MongoSingleton
 from utils.APIRouter import APIRouter
 from utils.utils import get_mongo_instance, get_user_object
 
@@ -13,8 +14,13 @@ router = APIRouter()
 @router.get("/permissions", status_code=200, response_model=list[str])
 async def get_permissions(
     player: Player = Depends(get_user_object),
+    delete: bool = False
 ):
-    return player.permissions
+    perms = player.permissions
+    if delete:
+        player.permissions = []
+        await player.save(MongoSingleton.get_instance())
+    return perms
 
 
 @router.delete("/permissions", status_code=200, response_model=list[str])
