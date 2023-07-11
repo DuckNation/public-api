@@ -13,8 +13,7 @@ router = APIRouter()
 
 @router.get("/permissions", status_code=200, response_model=list[str])
 async def get_permissions(
-    player: Player = Depends(get_user_object),
-    delete: bool = False
+    player: Player = Depends(get_user_object), delete: bool = False
 ):
     perms = player.permissions
     if delete:
