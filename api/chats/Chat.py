@@ -9,7 +9,7 @@ class Chat(BaseModel):
     players: list[str] = []
     password: str | None = None
     blocked_players: list[str] = Field(..., alias="blockedPlayers")
-    discord_id: int | None = Field(..., alias="discordId")
+    discord_id: int | None = Field(-1, alias="discordId")
 
     def dict(self, *args, **kwargs):
         return super().dict(by_alias=True)
