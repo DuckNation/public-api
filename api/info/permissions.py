@@ -19,7 +19,7 @@ async def get_permissions(
     perms = player.permissions
     if delete:
         player.permissions = []
-        await player.save(MongoSingleton.get_instance())
+        await player.save(await MongoSingleton.get_instance())
     return perms
 
 
