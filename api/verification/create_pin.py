@@ -22,18 +22,20 @@ async def create_pin(
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     uuid = format_uuid(uuid)
-    exists = await instance.happy.users.find_one({"username": username})
+    exists = await instance.happy.users.find_one({"uuid": uuid})
     pin = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     data = {"username": username, "pin": pin, "uuid": uuid}
     if exists:
-        if not exists["pin"]:
+        if "pin" in exists and "uid" in exists and exists["pin"] is None and exists["uid"] is not None:
             raise HTTPException(
                 status_code=400,
                 detail=f"<red>Your username is already registered. "
-                f"Run <aqua>.unverify</aqua> on "
-                f"discord to unverify!",
+                       f"Run <aqua>.unverify</aqua> on "
+                       f"discord to unverify!",
             )
         else:
+            del exists['_id']
+            data = exists
             data["pin"] = pin
     await instance.happy.users.replace_one({"uuid": uuid}, data, upsert=True)
     return {
