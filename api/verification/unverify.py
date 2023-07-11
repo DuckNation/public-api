@@ -1,5 +1,5 @@
 import pymongo
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from api.info.Player import Player
 from utils.utils import get_mongo_instance, get_user_object
@@ -12,6 +12,8 @@ async def unverify_endpoint(
     player: Player = Depends(get_user_object),
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
+    if len(player.saved_homes) > 0:
+        return HTTPException(detail=f"You must delete all of your homes before you can unverify. (Found {len(player.saved_homes)} home(s))", status_code=400)
     player.permissions.clear()
     saved_uuid = player.uuid
     player.pin = None
