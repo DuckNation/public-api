@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pymongo
 from fastapi import Depends
 
@@ -18,7 +20,7 @@ async def get_permissions(
 @router.delete("/permissions", status_code=200, response_model=list[str])
 async def clear_permissions(
     player: Player = Depends(get_user_object),
-    permission: [str, None] = None,
+    permission: Optional[str] = None,
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
     if permission:
@@ -36,6 +38,11 @@ async def add_permission(
     player: Player = Depends(get_user_object),
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
+    permission.replace("{username}", player.username)
+    permission.replace("{uuid}", player.uuid)
+    permission.replace("{uid}", str(player.uid))
+    permission.replace("{pin}", player.pin)
+
     if permission not in player.permissions:
         player.permissions.append(permission)
         await player.save(instance)
