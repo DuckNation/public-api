@@ -14,7 +14,7 @@ async def unverify_endpoint(
 ):
     if len(player.saved_homes) > 0:
         return HTTPException(detail=f"You must delete all of your homes before you can unverify. (Found {len(player.saved_homes)} home(s))", status_code=400)
-    player.permissions.clear()
+    player.permissions = [f"lpv user {player.username} parent clear"]
     saved_uuid = player.uuid
     player.pin = None
     player.uid = None

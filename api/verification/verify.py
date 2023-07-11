@@ -24,7 +24,7 @@ async def verify_endpoint(
         raise HTTPException(status_code=404, detail="Pin not found.")
     entry["uid"] = uid
     del entry["pin"]
-    entry["permissions"] = ["duck.chat"]
+    entry["permissions"] = [f"lpv user {entry['username']} parent add group.verified"]
     player = Player(**entry)
     await instance.happy.users.replace_one({"pin": pin}, player.dict(), upsert=True)
     return {

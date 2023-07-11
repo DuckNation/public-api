@@ -38,10 +38,10 @@ async def add_permission(
     player: Player = Depends(get_user_object),
     instance: pymongo.MongoClient = Depends(get_mongo_instance),
 ):
-    permission.replace("{username}", player.username)
-    permission.replace("{uuid}", player.uuid)
-    permission.replace("{uid}", str(player.uid))
-    permission.replace("{pin}", player.pin)
+    permission = permission.replace("{username}", player.username)
+    permission = permission.replace("{uuid}", player.uuid)
+    if player.uid:
+        permission = permission.replace("{uid}", str(player.uid))
 
     if permission not in player.permissions:
         player.permissions.append(permission)
