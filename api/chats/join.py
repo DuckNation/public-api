@@ -25,7 +25,7 @@ async def join_endpoint(
             detail=f"<red>A chat by the name of <yellow>{name}</yellow> does not exist.",
         )
 
-    if uuid in exists["players"] == uuid:
+    if uuid in exists["players"]:
         raise HTTPException(
             status_code=400, detail=f"<red>You are already in this chat."
         )
